@@ -125,7 +125,7 @@ class Commands:
 
         if result:
             i = 1
-            text = 'Топ 5 песен ' + self.__get_country_by_code(country_code) + ':\n\n'
+            text = 'Топ 5 исполнителей ' + self.__get_country_by_code(country_code) + ':\n\n'
 
             for artist in result:
                 artist = artist['artist']
