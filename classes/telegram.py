@@ -51,7 +51,7 @@ class Telegram:
                     if (self.last_update_id == update['update_id']): continue
 
                     self.last_update_id = update['update_id']
-                    message = update['message'] if update.get('message') else update['edited_message']
+                    message = update.get('message', update['edited_message'])
 
                     if self.__is_command_entity(message):
                         self._get_response(message)
@@ -70,7 +70,7 @@ class Telegram:
         """
 
         self.chat_id = message['chat']['id'] if message.get('chat') else 0
-        command = message['text'] if message.get('text') else '/start'
+        command = message.get('text', '/start')
         command = command.split(' ', 1)
         params = {'query' : command[1]} if len(command) > 1 else message
 

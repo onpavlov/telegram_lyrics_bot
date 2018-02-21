@@ -35,7 +35,7 @@ class Commands:
 
         message_from = message['from']
         user_first_name = message_from['first_name']
-        user_last_name = ' ' + message_from['last_name'] if message_from.get('last_name') else ''
+        user_last_name = ' ' + str(message_from.get('last_name', ''))
         text = 'Привет, ' + user_first_name + user_last_name + '!\n' \
             + 'Я Lyrics bot и я помогу тебе найти текст твоей любимой песни.\n' \
             + 'Просто набери /help и посмотри что я умею!'
@@ -92,7 +92,7 @@ class Commands:
         """
 
         text = 'К сожалению ничего не найдено :('
-        country_code = params['query'] if params.get('query') else self.DEFAULT_COUNTRY_CODE
+        country_code = params.get('query', self.DEFAULT_COUNTRY_CODE)
         result = self.musicsmatch.get_top_tracks(country_code)
 
         if result:
@@ -120,7 +120,7 @@ class Commands:
         """
 
         text = 'К сожалению ничего не найдено :('
-        country_code = params['query'] if params.get('query') else self.DEFAULT_COUNTRY_CODE
+        country_code = params.get('query', self.DEFAULT_COUNTRY_CODE)
         result = self.musicsmatch.get_top_artists(country_code)
 
         if result:
@@ -189,4 +189,4 @@ class Commands:
             'kz': 'Казахстана'
         }
 
-        return countries[country_code] if countries.get(country_code) else '(Код страны = ' + country_code + ')'
+        return countries.get(country_code, '(Код страны = ' + country_code + ')')
