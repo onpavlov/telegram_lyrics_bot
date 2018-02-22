@@ -51,7 +51,7 @@ class Telegram:
                     if (self.last_update_id == update['update_id']): continue
 
                     self.last_update_id = update['update_id']
-                    message = update.get('message', update['edited_message'])
+                    message = update.get('message', update.get('edited_message'))
 
                     if self.__is_command_entity(message):
                         self._get_response(message)

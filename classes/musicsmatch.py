@@ -65,7 +65,7 @@ class Musicsmatch:
         track = track_list['track_list'].pop()
         lyrics = self.get_lyrics_by_track_id(track['track']['track_id'])
 
-        if len(track) > 0 and len(lyrics) > 0:
+        if track and lyrics:
             return {
                 'title' : track['track']['artist_name'] + ' - ' + track['track']['track_name'],
                 'lyrics' : lyrics['lyrics']['lyrics_body'] + '\n\n' + lyrics['lyrics']['lyrics_copyright']
@@ -96,7 +96,7 @@ class Musicsmatch:
         track = track_list['track_list'].pop()
         lyrics = self.get_translate_by_track_id(track['track']['track_id'])
 
-        if len(track) > 0 and len(lyrics) > 0:
+        if track and lyrics:
             return {
                 'title' : track['track']['artist_name'] + ' - ' + track['track']['track_name'],
                 'lyrics' : lyrics['lyrics']['lyrics_body'] + '\n\n' + lyrics['lyrics']['lyrics_copyright']
