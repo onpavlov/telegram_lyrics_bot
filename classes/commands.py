@@ -102,9 +102,11 @@ class Commands:
             for song in result:
                 track = song['track']
                 duration = divmod(int(track['track_length']), 60)
+                minutes = str(duration[0])
+                seconds = str(duration[1]) if (len(str(duration[1])) > 1) else '0' + str(duration[1])
                 text += '*' + str(i) + '. ' + track['artist_name'] + '* - _' + track['track_name'] \
                         + '\n_ (Альбом: "' + track['album_name'] + '", Длительность: ' \
-                        + str(duration[0]) + ':' + str(duration[1]) + ')\n\n'
+                        + minutes + ':' + seconds + ')\n\n'
                 i += 1
 
         self.telegram.send_message(text)
@@ -186,7 +188,13 @@ class Commands:
             'au': 'Австралии',
             'by': 'Белоруссии',
             'us': 'США',
-            'kz': 'Казахстана'
+            'kz': 'Казахстана',
+            'gb': 'Великобритания',
+            'vn': 'Вьетнама',
+            'de': 'Германии',
+            'ge': 'Грузии',
+            'il': 'Израиля',
+            'in': 'Индии'
         }
 
-        return countries.get(country_code, '(Код страны = ' + country_code + ')')
+        return countries.get(country_code.lower(), '(Код страны = ' + country_code + ')')
