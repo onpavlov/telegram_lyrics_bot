@@ -1,7 +1,10 @@
 import requests, json, time
 from classes.commands import Commands
+from requests.exceptions import ReadTimeout
 
 class Telegram:
+    LONGPOLL_TIMEOUT = 100
+
     def __init__(self, config):
 
         """
@@ -26,7 +29,7 @@ class Telegram:
 
         return self._post_query('getMe')
 
-    def run(self, latency = 2):
+    def run(self):
 
         """
         Runs request loop
@@ -39,12 +42,13 @@ class Telegram:
         params = {}
 
         while True:
-            time.sleep(latency)
-
             if (len(str(self.last_update_id)) > 0):
-                params['offset'] = self.last_update_id
+                params['offset'] = self.last_update_id + 1
 
-            updates = self._get_updates(params)
+            try:
+                updates = self._get_updates(params)
+            except ReadTimeout:
+                continue
 
             if (bool(updates['ok'])):
                 for update in updates['result']:
@@ -106,10 +110,9 @@ class Telegram:
         :type params: dict
         :return:
         """
+        return self._post_query('getUpdates', params, True)
 
-        return self._post_query('getUpdates', params)
-
-    def _post_query(self, method ='', params = {}):
+    def _post_query(self, method ='', params = {}, long_poll = False):
 
         """
         Send POST query to API
@@ -118,10 +121,19 @@ class Telegram:
         :type method: str
         :param params: additional query params
         :type params: dict
+        :param long_poll: enable long polling
+        :type long_poll: bool
         :return:
         """
 
-        r = requests.post(self.api_link + 'bot' + self.token + '/' + method, params)
+        url = self.api_link + 'bot' + self.token + '/' + method
+
+        if long_poll:
+            params['timeout'] = self.LONGPOLL_TIMEOUT
+            r = requests.post(url, timeout = self.LONGPOLL_TIMEOUT, data = params)
+        else:
+            r = requests.post(url, data = params)
+
         return json.loads(r.text)
 
     def __is_command_entity(self, message):

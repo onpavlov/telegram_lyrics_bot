@@ -14,5 +14,6 @@ settings = {
     'musicsmatch_api_url': conf.get('musicsmatch', 'musicsmatch_api_url'),
 }
 
-telega = Telegram(settings)
-telega.run()
+if __name__ == '__main__':
+    telega = Telegram(settings)
+    telega.run()
